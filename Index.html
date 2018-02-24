@@ -2,9 +2,146 @@
 <html>
 <head>
 	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	<title> My Website
 	</title>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+canvas {
+    border:1px solid #d3d3d3;
+    background-color: #f1f1f1;
+}
+</style>
+</head>
+<body onload="startGame()">
+<script>
+
+var myGamePiece;
+var myObstacles = [];
+var myScore;
+
+function startGame() {
+    myGamePiece = new component(30, 30, "red", 10, 120);
+    myGamePiece.gravity = 0.05;
+    myScore = new component("30px", "Consolas", "black", 280, 40, "text");
+    myGameArea.start();
+}
+
+var myGameArea = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = 480;
+        this.canvas.height = 270;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.frameNo = 0;
+        this.interval = setInterval(updateGameArea, 20);
+        },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+}
+
+function component(width, height, color, x, y, type) {
+    this.type = type;
+    this.score = 0;
+    this.width = width;
+    this.height = height;
+    this.speedX = 0;
+    this.speedY = 0;    
+    this.x = x;
+    this.y = y;
+    this.gravity = 0;
+    this.gravitySpeed = 0;
+    this.update = function() {
+        ctx = myGameArea.context;
+        if (this.type == "text") {
+            ctx.font = this.width + " " + this.height;
+            ctx.fillStyle = color;
+            ctx.fillText(this.text, this.x, this.y);
+        } else {
+            ctx.fillStyle = color;
+            ctx.fillRect(this.x, this.y, this.width, this.height);
+        }
+    }
+    this.newPos = function() {
+        this.gravitySpeed += this.gravity;
+        this.x += this.speedX;
+        this.y += this.speedY + this.gravitySpeed;
+        this.hitBottom();
+    }
+    this.hitBottom = function() {
+        var rockbottom = myGameArea.canvas.height - this.height;
+        if (this.y > rockbottom) {
+            this.y = rockbottom;
+            this.gravitySpeed = 0;
+        }
+    }
+    this.crashWith = function(otherobj) {
+        var myleft = this.x;
+        var myright = this.x + (this.width);
+        var mytop = this.y;
+        var mybottom = this.y + (this.height);
+        var otherleft = otherobj.x;
+        var otherright = otherobj.x + (otherobj.width);
+        var othertop = otherobj.y;
+        var otherbottom = otherobj.y + (otherobj.height);
+        var crash = true;
+        if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+            crash = false;
+        }
+        return crash;
+    }
+}
+
+function updateGameArea() {
+    var x, height, gap, minHeight, maxHeight, minGap, maxGap;
+    for (i = 0; i < myObstacles.length; i += 1) {
+        if (myGamePiece.crashWith(myObstacles[i])) {
+            return;
+        } 
+    }
+    myGameArea.clear();
+    myGameArea.frameNo += 1;
+    if (myGameArea.frameNo == 1 || everyinterval(150)) {
+        x = myGameArea.canvas.width;
+        minHeight = 20;
+        maxHeight = 200;
+        height = Math.floor(Math.random()*(maxHeight-minHeight+1)+minHeight);
+        minGap = 50;
+        maxGap = 200;
+        gap = Math.floor(Math.random()*(maxGap-minGap+1)+minGap);
+        myObstacles.push(new component(10, height, "green", x, 0));
+        myObstacles.push(new component(10, x - height - gap, "green", x, height + gap));
+    }
+    for (i = 0; i < myObstacles.length; i += 1) {
+        myObstacles[i].x += -1;
+        myObstacles[i].update();
+    }
+    myScore.text="SCORE: " + myGameArea.frameNo;
+    myScore.update();
+    myGamePiece.newPos();
+    myGamePiece.update();
+}
+
+function everyinterval(n) {
+    if ((myGameArea.frameNo / n) % 1 == 0) {return true;}
+    return false;
+}
+
+function accelerate(n) {
+    myGamePiece.gravity = n;
+}
+</script>
+<br>
+<button onmousedown="accelerate(-0.2)" onmouseup="accelerate(0.05)">ACCELERATE</button>
+<p>Use the ACCELERATE button to stay in the air</p>
+<p>How long can you stay alive?</p>
+</body>
+</html>
+
+<br>
 </head>
 <body style = "background-color: powderblue">
 	<h1> Josh's website
@@ -29,12 +166,72 @@
 
 <h2> Favorite rapper
 </h2>
-	<p> My favorite rapper is Lil Uzi Vert. One of my favorite songs by him is "The Way Life Goes"
+	<p> My favorite rapper is Lil Uzi Vert. One of my favorite songs by him is "The Way Life Goes" He was recently nominated for multiple grammy's such as best new artist and best rap song
 	</p>
 	<img src = "https://thepantherpage.com/wp-content/uploads/2017/05/lil-uzi-vert.jpeg" width = 200 height = 200>
 	<br>
 <a href = https://www.youtube.com/watch?v=Vi2XaiKhgiU> click here for video
 </a>
+<h2> Best rappers
+</h2>
+	<p> <ol>
+		<li>Lil Uzi Vert</li>
+		<li>Ski Mask the Slump God</li>
+	</ol>
+	They are just better than everyone else its just simply not fair
+	</p>
+<h
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="div_style.css">
+		<title>Div example</title>
+	</head>
+	<body>
+
+		<div class = "large_container">
+			<div id = "upper-left" class = "small_container"></div>
+
+			<div id = "upper-right" class = "small_container"></div>
+
+			<div id = "lower-left" class = "small_container"></div>
+
+			<div id = "lower-right" class = "small_container"></div>
+		</div>
+
+	</body>
+</html>
+
+<h2 class="w3-center">Save the Penguins</h2>
+
+<div class="w3-content w3-display-container">
+  <img class="mySlides" src="http://www.animalspot.net/wp-content/uploads/2017/08/Baby-Penguins.jpg" style="width:100%">
+  <img class="mySlides" src="https://res.cloudinary.com/jpress/image/fetch/c_fill,f_auto,h_683,q_auto:eco,w_960/https://inews.co.uk/wp-content/uploads/2018/01/GettyImages-95848250-960x683.jpg" style="width:100%">
+  <img class="mySlides" src="https://i.pinimg.com/736x/98/ac/82/98ac823435626d9c9213cf9a28011369--penguin-baby-penguin-love.jpg" style="width:100%">
+  <img class="mySlides" src="https://pre00.deviantart.net/f0e9/th/pre/i/2011/166/5/1/save_the_penguins_by_metalxx69-d3iyhna.png" style="width:100%">
+
+  <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+  <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+</div>
+
 <br>
 <button><a href = "https://www.instagram.com/jp23_24/?hl=en"> My Instagram </a><button></button>
-</body>
+<script>
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";  
+  }
+  x[slideIndex-1].style.display = "block";  
+}
+</script>
